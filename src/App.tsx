@@ -1,26 +1,38 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React , {useState} from 'react';
+import NewTodo from './components/NewTodo';
+import TodoList from './components/TodoList';
 
-function App() {
+interface Todo {
+	id : string , 
+	text :string
+}
+const App: React.FC = () => {
+	const [todos , setTodos] = useState<Todo[]>([])
+	// const todos = [{ id: 't1', text: 'finish the course' }];	
+	const AddTodoHandler = (text : string)=>{
+		//old fasion of update state
+		// const newtodos = [...todos] ;
+		// newtodos.push({id:Math.random().toString() , text: text})
+		// setTodos(newtodos)
+		//new fashion 
+		setTodos(pre =>[
+			...pre ,
+			{id : Math.random().toString() , text}
+		])
+	}
+	const handleDelete= (id :string)=>{
+		let newtodos : Todo[] = [...todos] ;
+		newtodos = newtodos.filter(m=> m.id !== id) ;
+		setTodos(prev => prev = newtodos)
+
+	}
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+		<NewTodo add = {AddTodoHandler}/>
+		<TodoList items={todos} handleDelete={handleDelete}/>
+
     </div>
   );
-}
+};
 
 export default App;
